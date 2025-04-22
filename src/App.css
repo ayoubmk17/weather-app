@@ -1,0 +1,48 @@
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.weather-display {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.alert-container {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ffcccb;
+  border-radius: 5px;
+}
+
+.alert {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #ffdddd;
+  border-radius: 5px;
+}
+
+form {
+  margin-top: 20px;
+}
+
+input {
+  padding: 8px;
+  font-size: 16px;
+  width: 200px;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
