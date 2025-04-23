@@ -1,3 +1,4 @@
+/* Existing styles */
 .App {
   text-align: center;
   font-family: Arial, sans-serif;
@@ -44,5 +45,59 @@ button {
 }
 
 button:hover {
+  background-color: #45a049;
+}
+
+/*=====================search======================*/
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.search-btn {
+  background-color: #4CAF50;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-btn:hover {
+  background-color: #45a049;
+}
+
+.search-btn svg {
+  color: white;
+  font-size: 1.5rem;
+}
+
+/* Search bar container */
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  padding: 8px;
+  font-size: 16px;
+  width: 200px;
+  margin-right: 10px;
+}
+
+.search-bar button {
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
   background-color: #45a049;
 }

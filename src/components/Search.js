@@ -1,28 +1,37 @@
 import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa'; // Importing the search icon
 
-function Search({ onSearch }) {
-  const [input, setInput] = useState('');
+function Search(props) {
+    const [city, setCity] = useState('');
+    const [showInput, setShowInput] = useState(false); // State to toggle the input field
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (input) {
-      onSearch(input);  // Appel de la fonction onSearch pour envoyer la ville
-      setInput('');  // Réinitialiser le champ de saisie après la recherche
-    }
-  };
+    const handleSearch = () => {
+        props.onSearch(city);
+    };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Enter city"
-        value={input}
-        onChange={(e) => setInput(e.target.value)}  // Mise à jour du champ de saisie
-      />
-      <button type="submit">Search</button>
-    </form>
-  );
+    const toggleInput = () => {
+        setShowInput(!showInput); // Toggle the visibility of the input field
+    };
+
+    return (
+        <div className="search-container">
+            {showInput ? (
+                <div className="search-bar">
+                    <input 
+                        type="text" 
+                        value={city} 
+                        onChange={(e) => setCity(e.target.value)} 
+                        placeholder="Enter city"
+                    />
+                    <button onClick={handleSearch}>Search</button>
+                </div>
+            ) : (
+                <button onClick={toggleInput} className="search-btn">
+                    <FaSearch /> {/* Search icon */}
+                </button>
+            )}
+        </div>
+    );
 }
 
 export default Search;
-
