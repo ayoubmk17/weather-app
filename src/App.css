@@ -1,59 +1,151 @@
-/* Existing styles */
 .App {
-  text-align: center;
-  font-family: Arial, sans-serif;
+  display: flex;
+  height: 100vh;
+  align-items: flex-start;
 }
 
-.weather-display {
-  background-color: #f0f0f0;
+/* ===================== */
+/* STRUCTURE PRINCIPALE */
+/* ===================== */
+.weather-info-container {
+  max-width: 500px;
+  margin: 20px auto;
   padding: 20px;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-
-.alert-container {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #ffcccb;
-  border-radius: 5px;
-}
-
-.alert {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #ffdddd;
-  border-radius: 5px;
-}
-
-form {
-  margin-top: 20px;
-}
-
-input {
-  padding: 8px;
-  font-size: 16px;
-  width: 200px;
-}
-
-button {
-  padding: 8px 16px;
-  font-size: 16px;
-  background-color: #4CAF50;
+  text-align: center;
   color: white;
-  border: none;
-  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
 }
 
-button:hover {
-  background-color: #45a049;
+.weather-description {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-/*=====================search======================*/
+.weather-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+/* ===================== */
+/* WEATHER DISPLAY STYLES */
+/* ===================== */
+.weather-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.weather-main-icon {
+  font-size: 4em;
+  margin-bottom: 5px;
+}
+
+.temperature {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.weather-description {
+  font-style: italic;
+  margin-bottom: 15px;
+}
+
+.weather-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.weather-card {
+  width: 150px;
+  padding: 15px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.weather-card:hover {
+  transform: translateY(-5px);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ===================== */
+/* HOURLY FORECAST STYLES */
+/* ===================== */
+.hourly-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  color: #ffffff;
+}
+
+.hourly-forecast-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+/* ===================== */
+/* LOADING AND ERROR MESSAGES */
+/* ===================== */
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid white;
+  border-top: 6px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-top: 20px;
+}
+
+.error-message {
+  color: #ff6b6b;
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.5rem;
+  padding: 20px;
+  background-color: rgba(255, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================== */
+/* STRUCTURE DE LA PAGE AVEC LA CARTE A GAUCHE */
+/* ===================== */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 20px;
+  color: white;
+  width: 50%; /* Limite la largeur de la section des prévisions à droite */
+  z-index: 2;
+}
+
 .search-container {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  margin-bottom: 20px; /* Espacement du champ de recherche */
 }
 
 .search-btn {
@@ -76,16 +168,16 @@ button:hover {
   font-size: 1.5rem;
 }
 
-/* Search bar container */
 .search-bar {
   display: flex;
   align-items: center;
+  margin-left: 10px;
 }
 
 .search-bar input {
   padding: 8px;
   font-size: 16px;
-  width: 200px;
+  width: 250px; /* Ajuster la largeur du champ de recherche */
   margin-right: 10px;
 }
 
@@ -100,4 +192,23 @@ button:hover {
 
 .search-bar button:hover {
   background-color: #45a049;
+}
+
+/* ===================== */
+/* CARTE A GAUCHE : Background Globe */
+/* ===================== */
+.background-globe {
+  flex: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%; /* Carte à gauche */
+  height: 100%;
+  z-index: -1;
+}
+
+.content {
+  width: 50%; /* Section de contenu à droite */
+  padding-left: 20px;
+  padding-top: 50px;
 }

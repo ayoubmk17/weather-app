@@ -1,0 +1,14 @@
+.background-globe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Toujours derrière tout */
+    overflow: hidden;
+}
+  
+.background-globe canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
