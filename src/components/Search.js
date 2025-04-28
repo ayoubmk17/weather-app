@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa'; // Importing the search icon
+import { FaSearch } from 'react-icons/fa'; // Importation de l'icône de recherche
 
 function Search(props) {
     const [city, setCity] = useState('');
-    const [showInput, setShowInput] = useState(false); // State to toggle the input field
+    const [showInput, setShowInput] = useState(false); // Etat pour afficher ou cacher la barre de recherche
 
     const handleSearch = () => {
         props.onSearch(city);
     };
 
     const toggleInput = () => {
-        setShowInput(!showInput); // Toggle the visibility of the input field
+        setShowInput(!showInput); // Permet de basculer la visibilité du champ de recherche
     };
 
     return (
@@ -23,11 +23,13 @@ function Search(props) {
                         onChange={(e) => setCity(e.target.value)} 
                         placeholder="Enter city"
                     />
-                    <button onClick={handleSearch}>Search</button>
+                    <button onClick={handleSearch} className="search-submit-btn">
+                        <FaSearch /> {/* Icône de recherche */}
+                    </button>
                 </div>
             ) : (
                 <button onClick={toggleInput} className="search-btn">
-                    <FaSearch /> {/* Search icon */}
+                    <FaSearch /> {/* Icône de recherche */}
                 </button>
             )}
         </div>

@@ -75,7 +75,6 @@ function App() {
         <h1>WeatherApp</h1>
         <div className="search-container">
           <Search onSearch={handleSearch} />
-          {/* Le deuxième bouton est supprimé */}
         </div>
 
         {loading && <div className="loading-spinner"></div>}
