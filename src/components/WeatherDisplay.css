@@ -1,118 +1,252 @@
-.weather-info-container {
-    max-width: 500px;
-    margin: 20px auto;
-    padding: 20px;
-    text-align: center;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
-}
-
-.weather-description {
+/* ──────────────── */
+/* GENERAL STYLES */
+/* ──────────────── */
+.weather-display {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 20px;
 }
 
-.weather-icon {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
+.weather-left {
+  flex: 2;
 }
 
-.weather-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10px;
+.weather-right {
+  flex: 3;
+  margin-left: 40px;
 }
 
-.weather-main-icon {
-  font-size: 4em;
-  margin-bottom: 5px;
+.weather-left, .weather-right {
+  padding: 30px;
+  min-height: 80vh;
+  color: white;
+  background-color: transparent;
+  border-radius: 8px;
 }
 
-.temperature {
-  font-size: 2em;
-  font-weight: bold;
+/* ──────────────── */
+/* TYPOGRAPHIE AGRANDIE */
+.weather-left .hourly-title,
+.weather-right .hourly-title,
+.weather-right .temp-chart-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.weather-description {
-  font-style: italic;
+/* ──────────────── */
+/* COLONNE GAUCHE */
+.weather-left .weather-info-container {
+  margin-bottom: 30px;
+}
+
+.weather-left .weather-main-icon {
+  font-size: 6rem;
   margin-bottom: 15px;
 }
 
-.weather-details {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.weather-card {
-  width: 150px;
-  padding: 15px;
-  text-align: center;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.weather-card:hover {
-  transform: translateY(-5px);
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.weather-icon {
-  font-size: 2em;
-  margin-bottom: 5px;
-}
-
-.weather-value {
-  font-size: 1.3em;
+.weather-left .temperature {
+  font-size: 4.5rem;
   font-weight: bold;
-  margin: 5px 0;
+  margin: 10px 0;
 }
 
-.weather-minmax {
-  font-size: 0.9em;
-  color: #ddd;
-  margin-top: 5px;
+.weather-left .weather-description {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
 }
 
-.weather-gust {
-  font-size: 0.8em;
-  color: #ccc;
-  margin-top: 5px;
-}
-
-.hourly-title {
+.weather-left .local-time {
   font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 20px;
-  color: #ffffff;
+  opacity: 0.9;
 }
 
-.hourly-forecast-container {
+/* Détails météo en ligne */
+.weather-left .weather-details.horizontal {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 10px;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 25px 0;
 }
 
-.temp-chart-container {
-  margin-top: 30px;
-  width: 100%;
-  height: 250px;
-}
-
-.temp-chart-title {
+.weather-left .weather-card {
+  flex: 1;
   text-align: center;
-  margin-top: 20px;
-  font-size: 1.4rem;
-  color: #fff;
+}
+
+.weather-left .weather-icon {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.weather-left .weather-value {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.weather-left .weather-minmax {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* Prévisions horaires */
+.weather-left .hourly-scroll {
+  overflow-x: auto;
+  white-space: nowrap;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.weather-left .hourly-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 20px;
+  min-width: 80px;
+}
+
+.weather-left .hourly-item p {
+  margin: 5px 0;
+  font-size: 1.2rem;
+}
+
+/* ──────────────── */
+/* COLONNE DROITE */
+.weather-right .forecast-cards {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 20px;
+}
+
+.weather-right .forecast-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.weather-right .forecast-card:hover {
+  transform: translateY(-5px);
+}
+
+.weather-right .forecast-date {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.weather-right .forecast-temp {
+  font-size: 1.8rem;
+  color: #ffcc00;
+  margin: 10px 0;
+}
+
+.weather-right .forecast-desc {
+  font-size: 1.3rem;
+}
+
+/* Graphique */
+.weather-right .recharts-wrapper {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  margin-top: 30px;
+}
+
+/* ──────────────── */
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.8s ease-out;
+}
+
+/* ──────────────── */
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  .weather-display {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .weather-left, .weather-right {
+    width: 100%;
+    margin-left: 0;
+    padding: 20px;
+    min-height: auto;
+  }
+  
+  .weather-left .weather-details.horizontal {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .weather-right .forecast-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Ajustements typographie mobile */
+  .weather-left .hourly-title,
+  .weather-right .hourly-title,
+  .weather-right .temp-chart-title {
+    font-size: 1.8rem;
+  }
+  
+  .weather-left .weather-main-icon {
+    font-size: 5rem;
+  }
+  
+  .weather-left .temperature {
+    font-size: 3.5rem;
+  }
+  
+  .weather-left .weather-description {
+    font-size: 1.5rem;
+  }
+  
+  .weather-right .forecast-date {
+    font-size: 1.1rem;
+  }
+  
+  .weather-right .forecast-temp {
+    font-size: 1.5rem;
+  }
+  
+  .weather-right .forecast-desc {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-right .forecast-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

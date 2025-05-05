@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
-import { AnimatePresence, motion } from 'framer-motion'; // Importation de Framer Motion
-import { FaSearch } from 'react-icons/fa';  // Importation de l'icône de recherche de React Icons
+import { AnimatePresence, motion } from 'framer-motion';
 import Search from './components/Search';
 import WeatherDisplay from './components/WeatherDisplay';
-import HourlyForecast from './components/HourlyForecast';
 import Alert from './components/Alert';
 import BackgroundGlobe from './components/BackgroundGlobe';
 
@@ -15,11 +13,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [globeCoords, setGlobeCoords] = useState({ lat: 0, lng: 0 });
-  const [markers, setMarkers] = useState([]); // <-- nouveaux markers
+  const [markers, setMarkers] = useState([]);
 
   const handleSearch = async (cityName) => {
     setError(null);
-
     if (!cityName.trim()) {
       setError('Veuillez entrer un nom de ville');
       return;
@@ -27,41 +24,51 @@ function App() {
 
     const apiKey = process.env.REACT_APP_API_KEY;
     if (!apiKey) {
-      setError('Configuration API manquante');
+      setError('Clé API manquante. Vérifiez votre configuration.');
       return;
     }
 
     setLoading(true);
     try {
-      // 1) météo courante
+      // 1. Récupération des données météo actuelles
       const currentRes = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&lang=fr&appid=${apiKey}`
       );
       const currentData = await currentRes.json();
+      
       if (currentData.cod !== 200) {
         throw new Error(currentData.message || 'Ville non trouvée');
       }
 
-      // 2) prévisions (toutes les 3h sur 5 jours)
+      // 2. Récupération des prévisions
       const forecastRes = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=metric&lang=fr&appid=${apiKey}`
       );
       const forecastData = await forecastRes.json();
+      
       if (forecastData.cod !== '200') {
-        throw new Error(forecastData.message || 'Prévisions non disponibles');
+        throw new Error(forecastData.message || 'Erreur lors de la récupération des prévisions');
       }
 
       // Mise à jour des états
       setWeather(currentData);
       setForecast(forecastData);
       setCity(cityName);
-      setGlobeCoords({ lat: currentData.coord.lat, lng: currentData.coord.lon });
-      setMarkers([{ lat: currentData.coord.lat, lng: currentData.coord.lon }]); // 💥 Ajout marker
+      setGlobeCoords({ 
+        lat: currentData.coord.lat, 
+        lng: currentData.coord.lon 
+      });
+      setMarkers([{ 
+        lat: currentData.coord.lat, 
+        lng: currentData.coord.lon,
+        city: cityName 
+      }]);
+
     } catch (err) {
-      setError(err.message);
+      console.error('Erreur API:', err);
+      setError(err.message || 'Une erreur est survenue');
       setWeather(null);
       setForecast(null);
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -69,39 +76,70 @@ function App() {
 
   return (
     <div className="App">
-      <BackgroundGlobe globeCoords={globeCoords} markers={markers} />
+      <BackgroundGlobe 
+        globeCoords={globeCoords} 
+        markers={markers} 
+      />
 
       <div className="content">
         <h1>WeatherApp</h1>
+        
+        {/* Barre de recherche */}
         <div className="search-container">
-          <Search onSearch={handleSearch} />
+          <Search 
+            onSearch={handleSearch} 
+            disabled={loading}
+          />
         </div>
 
-        {loading && <div className="loading-spinner"></div>}
-        {error && <div className="error">{error}</div>}
+        {/* États de chargement et d'erreur */}
+        {loading && (
+          <motion.div
+            className="loading-spinner"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <div className="spinner"></div>
+          </motion.div>
+        )}
 
-        <AnimatePresence exitBeforeEnter>
+        {error && (
+          <motion.div
+            className="error-message"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            {error}
+          </motion.div>
+        )}
+
+        {/* Affichage des données météo */}
+        <AnimatePresence mode="wait">
           {weather && forecast && (
             <motion.div
               key={city}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
+              className="weather-panels"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
-              <WeatherDisplay
-                data={weather}
-                city={city}
-                forecast={forecast}
-              />
-
-              <div className="hourly-title">Prévisions horaires</div>
-
-              <div className="hourly-forecast-container">
-                <HourlyForecast forecast={forecast} />
+              <div className="left-panel">
+                <WeatherDisplay 
+                  data={weather} 
+                  city={city} 
+                  forecast={forecast} 
+                />
               </div>
 
-              {weather.alerts && <Alert alerts={weather.alerts} />}
+              <div className="right-panel">
+                {weather.alerts && weather.alerts.length > 0 && (
+                  <>
+                    <h3>Alertes Météo</h3>
+                    <Alert alerts={weather.alerts} />
+                  </>
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
