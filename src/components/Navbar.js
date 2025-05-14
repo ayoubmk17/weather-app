@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaUser, FaSignOutAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import Search from './Search';
 import './Navbar.css';
 
-const Navbar = ({ onLogin, onSearch, isLoggedIn, user, onLogout }) => {
+const Navbar = ({ onLogin, onSearch, isLoggedIn, user, onLogout, onLocationClick }) => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
@@ -13,10 +13,22 @@ const Navbar = ({ onLogin, onSearch, isLoggedIn, user, onLogout }) => {
       <div className="navbar-right">
         <div className="navbar-search">
           <Search onSearch={onSearch} />
+          {isLoggedIn && user && (
+            <motion.button
+              className="location-button"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onLocationClick}
+              aria-label="Utiliser ma position"
+              title="Utiliser ma position actuelle"
+            >
+              <FaMapMarkerAlt className="location-icon" />
+            </motion.button>
+          )}
         </div>
-        {isLoggedIn ? (
+        {isLoggedIn && user ? (
           <div className="user-info">
-            <span className="user-name">{user?.firstName || 'Utilisateur'}</span>
+            <span className="user-name">{user.firstName || 'Utilisateur'}</span>
             <motion.button
               className="logout-button"
               whileHover={{ scale: 1.05 }}
