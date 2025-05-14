@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 import { AnimatePresence, motion } from 'framer-motion';
-import Search from './components/Search';
 import WeatherDisplay from './components/WeatherDisplay';
 import Alert from './components/Alert';
 import BackgroundGlobe from './components/BackgroundGlobe';
+import Navbar from './components/Navbar';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -14,6 +14,12 @@ function App() {
   const [error, setError] = useState(null);
   const [globeCoords, setGlobeCoords] = useState({ lat: 0, lng: 0 });
   const [markers, setMarkers] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    // TODO: Implémenter la logique de connexion
+    setIsLoggedIn(!isLoggedIn);
+  };
 
   const handleSearch = async (cityName) => {
     setError(null);
@@ -81,17 +87,9 @@ function App() {
         markers={markers} 
       />
 
-      <div className="content">
-        <h1>WeatherApp</h1>
-        
-        {/* Barre de recherche */}
-        <div className="search-container">
-          <Search 
-            onSearch={handleSearch} 
-            disabled={loading}
-          />
-        </div>
+      <Navbar onLogin={handleLogin} onSearch={handleSearch} />
 
+      <div className="content">
         {/* États de chargement et d'erreur */}
         {loading && (
           <motion.div

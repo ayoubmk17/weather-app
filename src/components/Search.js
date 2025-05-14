@@ -1,39 +1,29 @@
 import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa'; // Importation de l'icône de recherche
+import { FaSearch } from 'react-icons/fa';
+import './Search.css';
 
-function Search(props) {
-    const [city, setCity] = useState('');
-    const [showInput, setShowInput] = useState(false); // Etat pour afficher ou cacher la barre de recherche
+const Search = ({ onSearch, disabled }) => {
+  const [searchTerm, setSearchTerm] = useState('');
 
-    const handleSearch = () => {
-        props.onSearch(city);
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(searchTerm);
+  };
 
-    const toggleInput = () => {
-        setShowInput(!showInput); // Permet de basculer la visibilité du champ de recherche
-    };
-
-    return (
-        <div className="search-container">
-            {showInput ? (
-                <div className="search-bar">
-                    <input 
-                        type="text" 
-                        value={city} 
-                        onChange={(e) => setCity(e.target.value)} 
-                        placeholder="Enter city"
-                    />
-                    <button onClick={handleSearch} className="search-submit-btn">
-                        <FaSearch /> {/* Icône de recherche */}
-                    </button>
-                </div>
-            ) : (
-                <button onClick={toggleInput} className="search-btn">
-                    <FaSearch /> {/* Icône de recherche */}
-                </button>
-            )}
-        </div>
-    );
-}
+  return (
+    <form onSubmit={handleSubmit} className="search-form">
+      <div className="search-bar">
+        <FaSearch className="search-icon" />
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Rechercher une ville..."
+          disabled={disabled}
+        />
+      </div>
+    </form>
+  );
+};
 
 export default Search;
