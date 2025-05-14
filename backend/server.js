@@ -8,17 +8,80 @@ require('dotenv').config();
 const app = express();
 const User = require('./models/User');
 
-// Middleware
-app.use(cors());
+// Enhanced error handling for environment variables
+const requiredEnvVars = ['MONGODB_URI', 'JWT_SECRET'];
+requiredEnvVars.forEach(envVar => {
+  if (!process.env[envVar]) {
+    console.error(`Error: Environment variable ${envVar} is not set`);
+    process.exit(1);
+  }
+});
+
+// CORS configuration
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
-// MongoDB Connection
+// MongoDB Connection with enhanced error handling
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(() => {
+  console.log('Connected to MongoDB successfully');
+  console.log('Database URL:', process.env.MONGODB_URI.replace(/\/\/[^:]+:[^@]+@/, '//')); // Hide credentials in logs
+})
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
+});
+
+// Route de test pour vérifier la connexion
+app.get('/api/test', async (req, res) => {
+  try {
+    // Vérifier la connexion à MongoDB
+    const dbStatus = mongoose.connection.readyState;
+    const statusMessages = {
+      0: 'Déconnecté',
+      1: 'Connecté',
+      2: 'Connexion en cours',
+      3: 'Déconnexion en cours'
+    };
+
+    // Tester la création et la lecture dans la base de données
+    const testUser = new User({
+      firstName: 'Test',
+      lastName: 'Connection',
+      email: `test${Date.now()}@test.com`,
+      password: 'testpassword',
+      role: 'user'
+    });
+
+    await testUser.save();
+    await User.findByIdAndDelete(testUser._id);
+
+    res.json({
+      status: 'success',
+      message: 'Test de connexion réussi',
+      databaseStatus: statusMessages[dbStatus],
+      mongodbConnected: dbStatus === 1,
+      timestamp: new Date()
+    });
+  } catch (error) {
+    console.error('Erreur lors du test:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Erreur lors du test de connexion',
+      error: error.message,
+      timestamp: new Date()
+    });
+  }
+});
 
 // Routes
 app.post('/api/register', async (req, res) => {
@@ -143,4 +206,6 @@ app.get('/api/profile', auth, async (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`API is accessible at http://localhost:${PORT}`);
+  console.log(`CORS is enabled for: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
 }); 

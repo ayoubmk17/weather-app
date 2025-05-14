@@ -16,17 +16,52 @@ function App() {
   const [globeCoords, setGlobeCoords] = useState({ lat: 0, lng: 0 });
   const [markers, setMarkers] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const handleLogin = (email, password, isSignUp) => {
-    // TODO: Implémenter la logique d'authentification réelle ici
-    console.log('Login attempt:', { email, password, isSignUp });
-    setIsLoggedIn(true);
-    setShowLoginModal(false);
+  const handleLogin = async (credentials, isSignUp) => {
+    try {
+      console.log('Tentative de connexion/inscription:', credentials);
+      const endpoint = isSignUp ? 'register' : 'login';
+      
+      // Vérifier que le serveur est accessible
+      try {
+        await fetch('http://localhost:5000/api/test');
+      } catch (error) {
+        throw new Error('Le serveur n\'est pas accessible. Vérifiez que le backend est en cours d\'exécution.');
+      }
+
+      const response = await fetch(`http://localhost:5000/api/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials)
+      });
+
+      console.log('Réponse du serveur:', response.status);
+      const data = await response.json();
+      console.log('Données reçues:', data);
+
+      if (response.ok) {
+        // Stocker le token et les informations utilisateur
+        localStorage.setItem('token', data.token);
+        setUser(data.user);
+        setIsLoggedIn(true);
+        setIsLoginModalOpen(false);
+        alert(isSignUp ? 'Inscription réussie !' : 'Connexion réussie !');
+      } else {
+        throw new Error(data.message || 'Une erreur est survenue lors de l\'authentification');
+      }
+    } catch (error) {
+      console.error('Erreur détaillée:', error);
+      alert(error.message || 'Une erreur est survenue lors de la connexion');
+    }
   };
 
-  const handleLoginClick = () => {
-    setShowLoginModal(true);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
   };
 
   const handleSearch = async (cityName) => {
@@ -96,14 +131,16 @@ function App() {
       />
 
       <Navbar 
-        onLogin={handleLoginClick}
+        onLogin={() => setIsLoginModalOpen(true)}
         onSearch={handleSearch}
         isLoggedIn={isLoggedIn}
+        user={user}
+        onLogout={handleLogout}
       />
 
       <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
       />
 

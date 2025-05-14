@@ -1,44 +1,26 @@
 .modal-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(5px);
-  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  width: 100%;
+  z-index: 9999;
 }
 
 .login-modal {
-  position: relative;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  padding: 2.5rem;
-  border-radius: 15px;
-  width: 90%;
+  background: rgba(30, 30, 30, 0.95);
+  padding: 2rem;
+  border-radius: 12px;
+  width: 100%;
   max-width: 400px;
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  margin-top: -5vh;
-  animation: modalAppear 0.3s ease-out;
-  transition: height 0.3s ease;
-}
-
-@keyframes modalAppear {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 .close-button {
@@ -49,22 +31,13 @@
   border: none;
   color: white;
   cursor: pointer;
-  font-size: 1.2rem;
   padding: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
+  font-size: 1.2rem;
 }
 
-.close-button:hover {
-  transform: rotate(90deg);
-}
-
-.login-modal h2 {
+h2 {
   text-align: center;
   margin-bottom: 2rem;
-  font-size: 1.8rem;
   color: white;
 }
 
@@ -73,23 +46,17 @@
 }
 
 .input-icon {
-  position: relative;
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.1);
+  padding: 0.8rem;
   border-radius: 8px;
-  padding: 0.8rem 1rem;
-  transition: background 0.3s ease;
-}
-
-.input-icon:hover {
-  background: rgba(255, 255, 255, 0.15);
+  margin-bottom: 1rem;
 }
 
 .input-icon svg {
-  color: rgba(255, 255, 255, 0.8);
   margin-right: 0.8rem;
-  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .input-icon input {
@@ -97,31 +64,28 @@
   border: none;
   color: white;
   width: 100%;
-  padding: 0;
-  font-size: 1rem;
   outline: none;
+  font-size: 1rem;
 }
 
 .input-icon input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .submit-button {
   width: 100%;
-  padding: 1rem;
+  padding: 0.8rem;
   background: #4a90e2;
   border: none;
   border-radius: 8px;
   color: white;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
   margin-top: 1rem;
 }
 
 .submit-button:hover {
   background: #357abd;
-  transform: translateY(-2px);
 }
 
 .switch-mode {
@@ -131,32 +95,19 @@
 }
 
 .switch-button {
-  background: transparent;
+  background: none;
   border: none;
   color: #4a90e2;
   cursor: pointer;
   margin-left: 0.5rem;
-  font-size: 1rem;
   text-decoration: underline;
-  transition: color 0.3s ease;
-}
-
-.switch-button:hover {
-  color: #357abd;
 }
 
 .role-selector {
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
   padding: 1rem;
-  margin-top: 0.5rem;
-}
-
-.role-selector label {
-  color: white;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  display: block;
+  border-radius: 8px;
+  margin-top: 1rem;
 }
 
 .role-options {
@@ -170,38 +121,9 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  color: white;
 }
 
 .role-option input[type="radio"] {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  border-radius: 50%;
-  outline: none;
-  cursor: pointer;
-  position: relative;
-}
-
-.role-option input[type="radio"]:checked {
-  border-color: #4a90e2;
-  background: #4a90e2;
-}
-
-.role-option input[type="radio"]:checked::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0.4rem;
-  height: 0.4rem;
-  background: white;
-  border-radius: 50%;
-}
-
-.role-option span {
-  font-size: 0.9rem;
-  color: white;
+  margin: 0;
 } 
