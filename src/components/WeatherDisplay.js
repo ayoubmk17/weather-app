@@ -83,7 +83,6 @@ const WeatherDisplay = ({ data, forecast }) => {
             <div className="weather-description">{data.weather[0].description}</div>
             <div className="local-time">Heure locale : {localTime}</div>
           </div>
-          <div className="weather-details horizontal">
             <div className="weather-card">
               <WiHumidity className="weather-icon" />
               <div className="weather-value">{data.main.humidity}%</div>
@@ -97,56 +96,57 @@ const WeatherDisplay = ({ data, forecast }) => {
               <div className="weather-value">{data.main.pressure} hPa</div>
             </div>
           </div>
-          <div className="hourly-forecast">
-            <h3>Prévisions horaires</h3>
-            <div className="hourly-scroll">
-              {hourly.map((hour, i) => (
-                <div className="hourly-item" key={i}>
-                  <p>{new Date(hour.dt * 1000).getHours()}h</p>
-                  {getWeatherIcon(hour.main)}
-                  <p>{Math.round(hour.temp)}°C</p>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
-      </div>
 
       {/* Espace central */}
       <div className="weather-spacer"></div>
 
       {/* Partie droite */}
       <div className="weather-right animate-slide-in">
-        <div className="forecast-section">
-          <h3>Prévisions sur 7 jours</h3>
-          <div className="forecast-cards">
-            {daily.map((day, i) => (
-              <div className="forecast-card" key={i}>
-                <div className="forecast-date">
-                  {new Date(day.dt * 1000).toLocaleDateString("fr-FR", { weekday: "short" })}
-                </div>
-                {getWeatherIcon(day.main)}
-                <div className="forecast-temp">{Math.round(day.temp)}°C</div>
+        <div className="hourly-forecast">
+          <h3>Prévisions horaires</h3>
+          <div className="hourly-scroll">
+            {hourly.map((hour, i) => (
+              <div className="hourly-item" key={i}>
+                <p>{new Date(hour.dt * 1000).getHours()}h</p>
+                {getWeatherIcon(hour.main)}
+                <p>{Math.round(hour.temp)}°C</p>
               </div>
             ))}
           </div>
         </div>
-        <div className="temp-chart-container">
-          <div className="temp-chart-title">Évolution des températures</div>
-          <ResponsiveContainer width="100%" height={200}>
-            <LineChart
-              data={daily.map((d) => ({
-                name: new Date(d.dt * 1000).toLocaleDateString("fr-FR", { weekday: "short" }),
-                temp: d.temp,
-              }))}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="temp" stroke="#ffcc00" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+        <div className="forecast-and-chart">
+          <div className="forecast-section">
+            <h3>Prévisions sur 7 jours</h3>
+            <div className="forecast-cards">
+              {daily.map((day, i) => (
+                <div className="forecast-card" key={i}>
+                  <div className="forecast-date">
+                    {new Date(day.dt * 1000).toLocaleDateString("fr-FR", { weekday: "short" })}
+                  </div>
+                  {getWeatherIcon(day.main)}
+                  <div className="forecast-temp">{Math.round(day.temp)}°C</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="temp-chart-container">
+            <div className="temp-chart-title">Évolution des températures</div>
+            <ResponsiveContainer width="100%" height={150}>
+              <LineChart
+                data={daily.map((d) => ({
+                  name: new Date(d.dt * 1000).toLocaleDateString("fr-FR", { weekday: "short" }),
+                  temp: d.temp,
+                }))}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" fontSize={12} />
+                <YAxis fontSize={12} />
+                <Tooltip />
+                <Line type="monotone" dataKey="temp" stroke="#ffcc00" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

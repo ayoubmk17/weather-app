@@ -2,13 +2,58 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
     z-index: -1;
+    background: #000;
     overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
   }
   
   .background-globe canvas {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    cursor: grab;
+    pointer-events: auto;
+  }
+
+  .background-globe canvas:active {
+    cursor: grabbing;
+  }
+
+  .globe-controls-info {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: white;
+    font-size: 0.9rem;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: opacity 0.3s ease;
+    opacity: 0.7;
+  }
+
+  .globe-controls-info:hover {
+    opacity: 1;
+  }
+
+  .globe-controls-info p {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+    color: #4a90e2;
+  }
+
+  .globe-controls-info ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+
+  .globe-controls-info li {
+    margin: 5px 0;
+    color: rgba(255, 255, 255, 0.9);
   }

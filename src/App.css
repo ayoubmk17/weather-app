@@ -2,26 +2,25 @@
 /* STYLE GLOBAL */
 /* ===================== */
 .App {
-  display: flex;
-  height: 100vh;
-  align-items: flex-start;
+  min-height: 100vh;
+  position: relative;
+  background: transparent;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ===================== */
 /* STRUCTURE DE LA PAGE AVEC LA CARTE À GAUCHE */
 /* ===================== */
 .content {
-  flex: 1;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 20px;
-  color: white;
-  width: 50%;
-  z-index: 2;
-  margin-top: 10px;
-  padding-top: 80px;
+  gap: 10px;
 }
 
 /* ===================== */
@@ -108,26 +107,29 @@
 /* WEATHER DISPLAY STYLES */
 /* ===================== */
 .weather-info-container {
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
+  max-width: 400px;
+  margin: 10px auto;
+  padding: 10px;
   text-align: center;
   color: white;
-  background-color: transparent; /* Fond transparent */
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
+  backdrop-filter: blur(5px);
+  margin-bottom: 20px;
 }
 
 .weather-description {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
 }
 
 .weather-icon {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 10px;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 5px;
 }
 
 .weather-main {
@@ -138,59 +140,77 @@
 }
 
 .weather-main-icon {
-  font-size: 4em;
-  margin-bottom: 5px;
+  font-size: 2.5em;
+  margin-bottom: 2px;
 }
 
 .temperature {
-  font-size: 2em;
+  font-size: 1.5em;
   font-weight: bold;
+  margin: 5px 0;
 }
 
 .weather-description {
   font-style: italic;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .weather-details {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 5px;
+  margin-top: 10px;
 }
 
 .weather-card {
-  width: 150px;
-  padding: 15px;
+  width: 100px;
+  padding: 8px;
   text-align: center;
-  background-color: transparent; /* Fond transparent */
+  background-color: rgba(44, 62, 80, 0.4);
   border-radius: 8px;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition: transform 0.3s ease;
+  font-size: 0.85em;
 }
 
 .weather-card:hover {
-  transform: translateY(-5px);
-  background-color: transparent; /* Fond transparent lors du survol */
+  transform: translateY(-3px);
+  background-color: rgba(44, 62, 80, 0.6);
 }
 
 /* ===================== */
 /* HOURLY FORECAST STYLES */
 /* ===================== */
 .hourly-title {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15px;
   color: #ffffff;
 }
 
 .hourly-forecast-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  padding: 15px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(100px, 1fr);
+  max-height: 200px;
+}
+
+.hourly-card {
+  background-color: rgba(44, 62, 80, 0.4);
+  padding: 3px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.7em;
 }
 
 /* ===================== */
@@ -226,13 +246,14 @@
 /* CARTE À GAUCHE : Background Globe */
 /* ===================== */
 .background-globe {
-  flex: 1;
+  width: 100vw;
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  width: 50%;
-  height: 100%;
-  z-index: -1;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
 }
 
 /* ===================== */
@@ -254,4 +275,94 @@
   padding: 20px;
   width: 48%;
   color: white;
+}
+
+/* Ajout d'un séparateur */
+.section-divider {
+  width: 80%;
+  max-width: 400px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+  margin: 15px auto;
+}
+
+/* Section des prévisions horaires */
+.hourly-section {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 30px auto;
+  max-width: 90%;
+  backdrop-filter: blur(5px);
+}
+
+.hourly-forecast-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  padding: 15px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(100px, 1fr);
+  max-height: 200px;
+}
+
+/* Style pour la barre de défilement horizontale */
+.hourly-forecast-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.hourly-forecast-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.hourly-forecast-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+/* Section des prévisions sur 7 jours */
+.weekly-forecast-section {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 30px auto;
+  max-width: 90%;
+  backdrop-filter: blur(5px);
+}
+
+.weekly-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+/* Style pour les cartes horaires */
+.hourly-card {
+  background-color: rgba(44, 62, 80, 0.4);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 100px;
+}
+
+.hourly-card:hover {
+  background-color: rgba(44, 62, 80, 0.6);
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
+}
+
+/* Ajustement de l'heure locale */
+.local-time {
+  font-size: 1em;
+  margin: 5px 0;
+  opacity: 0.9;
 }

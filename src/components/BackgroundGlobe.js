@@ -4,20 +4,48 @@ import './BackgroundGlobe.css';
 
 function BackgroundGlobe({ globeCoords, markers }) {
   const globeEl = useRef();
-  const [autoRotate, setAutoRotate] = useState(true); // <-- Ajout du contrôle d'auto-rotation
+  const [dimensions, setDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
 
   useEffect(() => {
     if (globeEl.current) {
-      globeEl.current.controls().autoRotate = autoRotate;
-      globeEl.current.controls().autoRotateSpeed = 0.5; // Vitesse de rotation
+      const globe = globeEl.current;
+      
+      const controls = globe.controls();
+      controls.enableZoom = true;
+      controls.enableRotate = true;
+      controls.enablePan = true;
+      controls.minDistance = 120;
+      controls.maxDistance = 800;
+      controls.rotateSpeed = 0.8;
+      controls.zoomSpeed = 1.2;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.5;
+
+      globe.resumeAnimation();
     }
-  }, [autoRotate]);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (globeCoords.lat !== 0 && globeCoords.lng !== 0 && globeEl.current) {
-      // Stopper l'auto-rotation une fois la ville affichée
-      setAutoRotate(false);
-
+      const controls = globeEl.current.controls();
+      
+      controls.autoRotate = false;
+      
       globeEl.current.pointOfView(
         { lat: globeCoords.lat, lng: globeCoords.lng, altitude: 1.5 },
         1500
@@ -36,15 +64,19 @@ function BackgroundGlobe({ globeCoords, markers }) {
     <div className="background-globe">
       <Globe
         ref={globeEl}
+        width={dimensions.width}
+        height={dimensions.height}
         globeImageUrl="https://unpkg.com/three-globe/example/img/earth-night.jpg"
         backgroundImageUrl="https://unpkg.com/three-globe/example/img/night-sky.png"
         pointsData={markers}
         pointLat={(d) => d.lat}
         pointLng={(d) => d.lng}
         pointColor={() => 'orange'}
-        pointAltitude={0.03}
-        pointRadius={0.3}
-        pointResolution={12}
+        pointAltitude={0.05}
+        pointRadius={0.5}
+        pointResolution={16}
+        enablePointerInteraction={true}
+        dragRotate={true}
       />
     </div>
   );
