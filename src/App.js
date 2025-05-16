@@ -25,6 +25,39 @@ function App() {
   const [userLocation, setUserLocation] = useState(null);
   const [handleZoomOut, setHandleZoomOut] = useState(null);
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await fetch('http://localhost:5000/api/profile', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data.user);
+            setIsLoggedIn(true);
+          } else {
+            // Si le token n'est plus valide, on déconnecte l'utilisateur
+            localStorage.removeItem('token');
+            setUser(null);
+            setIsLoggedIn(false);
+          }
+        } catch (error) {
+          console.error('Erreur lors de la vérification du token:', error);
+          localStorage.removeItem('token');
+          setUser(null);
+          setIsLoggedIn(false);
+        }
+      }
+    };
+
+    checkAuth();
+  }, []);
+
   const zoomOutRef = useCallback((zoomOutFn) => {
     setHandleZoomOut(() => zoomOutFn);
   }, []);

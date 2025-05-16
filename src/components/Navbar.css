@@ -12,6 +12,12 @@
   z-index: 1000;
 }
 
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .navbar-brand h2 {
   color: white;
   margin: 0;

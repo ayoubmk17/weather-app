@@ -26,9 +26,9 @@ const WeatherDisplay = ({ data, forecast }) => {
   useEffect(() => {
     if (data?.timezone) {
       const now = new Date();
-      const localTimeString = new Date(
-        now.getTime() + data.timezone * 1000
-      ).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      const localTimeString = new Date(utc + (data.timezone * 1000))
+        .toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
       setLocalTime(localTimeString);
     }
   }, [data]);
@@ -40,7 +40,7 @@ const WeatherDisplay = ({ data, forecast }) => {
 
   // Prévisions horaires (6 prochaines heures)
   const hourly = forecast.list.slice(0, 6).map((hour) => ({
-    dt: hour.dt,
+    dt: new Date(hour.dt * 1000),
     temp: hour.main.temp,
     main: hour.weather[0].main,
   }));
@@ -50,7 +50,7 @@ const WeatherDisplay = ({ data, forecast }) => {
     .filter((item) => item.dt_txt.includes("12:00:00"))
     .slice(0, 7)
     .map((day) => ({
-      dt: day.dt,
+      dt: new Date(day.dt * 1000),
       temp: day.main.temp,
       main: day.weather[0].main,
     }));
@@ -108,7 +108,7 @@ const WeatherDisplay = ({ data, forecast }) => {
           <div className="hourly-scroll">
             {hourly.map((hour, i) => (
               <div className="hourly-item" key={i}>
-                <p>{new Date(hour.dt * 1000).getHours()}h</p>
+                <p>{hour.dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</p>
                 {getWeatherIcon(hour.main)}
                 <p>{Math.round(hour.temp)}°C</p>
               </div>
@@ -122,7 +122,7 @@ const WeatherDisplay = ({ data, forecast }) => {
               {daily.map((day, i) => (
                 <div className="forecast-card" key={i}>
                   <div className="forecast-date">
-                    {new Date(day.dt * 1000).toLocaleDateString("fr-FR", { weekday: "short" })}
+                    {day.dt.toLocaleDateString("fr-FR", { weekday: "short" })}
                   </div>
                   {getWeatherIcon(day.main)}
                   <div className="forecast-temp">{Math.round(day.temp)}°C</div>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FaFileAlt, FaSort, FaFilter } from 'react-icons/fa';
+import { FaFileAlt, FaEye, FaDownload, FaSort } from 'react-icons/fa';
 import './Pages.css';
 
 const ViewReportsPage = ({ onClose, user }) => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selectedReport, setSelectedReport] = useState(null);
   const [filter, setFilter] = useState('all');
   const [sortBy, setSortBy] = useState('date');
   const [sortOrder, setSortOrder] = useState('desc');
@@ -24,9 +26,11 @@ const ViewReportsPage = ({ onClose, user }) => {
       if (response.ok) {
         const data = await response.json();
         setReports(data);
+      } else {
+        throw new Error('Erreur lors de la récupération des rapports');
       }
     } catch (error) {
-      console.error('Erreur lors de la récupération des rapports:', error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -41,25 +45,75 @@ const ViewReportsPage = ({ onClose, user }) => {
     }
   };
 
+  const handleDownload = (report) => {
+    // Créer un fichier texte du rapport
+    const reportContent = `
+Rapport Météorologique
+=====================
+
+Titre: ${report.title}
+Type: ${getReportTypeLabel(report.type)}
+Localisation: ${report.location}
+Date: ${formatDate(report.createdAt)}
+Auteur: ${report.author.firstName} ${report.author.lastName}
+
+Contenu:
+--------
+${report.content}
+    `;
+
+    const blob = new Blob([reportContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${report.title.replace(/\s+/g, '_')}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const getReportTypeLabel = (type) => {
+    const types = {
+      daily: 'Journalier',
+      weekly: 'Hebdomadaire',
+      monthly: 'Mensuel',
+      special: 'Spécial'
+    };
+    return types[type] || type;
+  };
+
   return (
     <div className="page-container">
       <div className="page-content">
-        <h2>Rapports</h2>
+        <h2>Rapports Météorologiques</h2>
         
+        {error && <div className="error-message">{error}</div>}
+
         <div className="reports-controls">
           <div className="filter-section">
-            <label htmlFor="filter">Filtrer par:</label>
+            <label htmlFor="filter">Type de rapport:</label>
             <select
               id="filter"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="filter-select"
+              className="report-select"
             >
               <option value="all">Tous</option>
-              <option value="bug">Bugs techniques</option>
-              <option value="data">Données météo</option>
-              <option value="feature">Suggestions</option>
-              <option value="other">Autres</option>
+              <option value="daily">Journalier</option>
+              <option value="weekly">Hebdomadaire</option>
+              <option value="monthly">Mensuel</option>
+              <option value="special">Spécial</option>
             </select>
           </div>
 
@@ -80,29 +134,56 @@ const ViewReportsPage = ({ onClose, user }) => {
         </div>
 
         {loading ? (
-          <div className="loading">Chargement des rapports...</div>
+          <div className="loading-message">Chargement des rapports...</div>
+        ) : reports.length === 0 ? (
+          <div className="no-reports-message">
+            Aucun rapport disponible.
+          </div>
         ) : (
           <div className="reports-list">
-            {reports.map((report) => (
-              <div key={report._id} className="report-card">
+            {reports.map(report => (
+              <div key={report._id} className="report-item">
                 <div className="report-header">
-                  <h3>{report.title}</h3>
+                  <div className="report-title">
+                    <FaFileAlt className="report-icon" />
+                    <h3>{report.title}</h3>
+                  </div>
                   <span className={`report-type ${report.type}`}>
-                    {report.type}
+                    {getReportTypeLabel(report.type)}
                   </span>
                 </div>
-                <p className="report-description">{report.description}</p>
-                <div className="report-footer">
-                  <span className="report-date">
-                    {new Date(report.createdAt).toLocaleDateString('fr-FR', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric'
-                    })}
-                  </span>
-                  <span className="report-author">
-                    Par: {report.author.firstName} {report.author.lastName}
-                  </span>
+
+                <div className="report-info">
+                  <span>Localisation: {report.location}</span>
+                  <span>Date: {formatDate(report.createdAt)}</span>
+                  <span>Par: {report.author.firstName} {report.author.lastName}</span>
+                </div>
+
+                {selectedReport === report._id && (
+                  <div className="report-content">
+                    <div className="text-content">{report.content}</div>
+                    <button
+                      className="close-preview-button"
+                      onClick={() => setSelectedReport(null)}
+                    >
+                      Fermer l'aperçu
+                    </button>
+                  </div>
+                )}
+
+                <div className="report-actions">
+                  <button
+                    className="action-button view"
+                    onClick={() => setSelectedReport(selectedReport === report._id ? null : report._id)}
+                  >
+                    <FaEye /> {selectedReport === report._id ? 'Masquer' : 'Aperçu'}
+                  </button>
+                  <button
+                    className="action-button download"
+                    onClick={() => handleDownload(report)}
+                  >
+                    <FaDownload /> Télécharger
+                  </button>
                 </div>
               </div>
             ))}
@@ -110,7 +191,7 @@ const ViewReportsPage = ({ onClose, user }) => {
         )}
 
         <div className="button-group">
-          <button onClick={onClose} className="close-button">
+          <button onClick={onClose} className="cancel-button">
             Fermer
           </button>
         </div>

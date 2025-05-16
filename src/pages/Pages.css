@@ -139,21 +139,27 @@
 }
 
 .submit-button,
-.cancel-button {
+.cancel-button,
+.action-button,
+.sort-button,
+.close-preview-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
   border: none;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
+  min-width: 120px;
+  text-align: center;
 }
 
 .submit-button {
   background: #4a90e2;
   color: white;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 .submit-button:hover {
@@ -169,8 +175,50 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-.button-icon {
-  margin-left: 0.5rem;
+.sort-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  min-width: 100px;
+  padding: 0.6rem 1rem;
+}
+
+.sort-button:hover,
+.sort-button.active {
+  background: #4a90e2;
+}
+
+.action-button {
+  min-width: 130px;
+  padding: 0.6rem 1rem;
+}
+
+.action-button.view {
+  background: rgba(74, 144, 226, 0.2);
+  color: #4a90e2;
+}
+
+.action-button.view:hover {
+  background: rgba(74, 144, 226, 0.3);
+}
+
+.action-button.download {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.action-button.download:hover {
+  background: rgba(46, 204, 113, 0.3);
+}
+
+.close-preview-button {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  margin-top: 1rem;
+}
+
+.close-preview-button:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* Système de notation */
@@ -214,19 +262,7 @@
 .sort-buttons {
   display: flex;
   gap: 0.5rem;
-}
-
-.sort-button {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-}
-
-.sort-button.active {
-  background: #4a90e2;
+  align-items: center;
 }
 
 .reports-list {
@@ -264,6 +300,7 @@
   margin: 0;
   color: white;
   font-size: 1.2rem;
+  text-align: left;
 }
 
 .report-icon {
@@ -288,7 +325,9 @@
   gap: 2rem;
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.9rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .report-content {
@@ -302,6 +341,7 @@
   white-space: pre-wrap;
   color: white;
   line-height: 1.6;
+  text-align: left;
 }
 
 .pdf-viewer {
@@ -318,70 +358,16 @@
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-}
-
-.action-button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
-}
-
-.action-button.view {
-  background: rgba(74, 144, 226, 0.2);
-  color: #4a90e2;
-}
-
-.action-button.view:hover {
-  background: rgba(74, 144, 226, 0.3);
-}
-
-.action-button.download {
-  background: rgba(46, 204, 113, 0.2);
-  color: #2ecc71;
-}
-
-.action-button.download:hover {
-  background: rgba(46, 204, 113, 0.3);
-}
-
-.action-button.delete {
-  background: rgba(231, 76, 60, 0.2);
-  color: #e74c3c;
-}
-
-.action-button.delete:hover {
-  background: rgba(231, 76, 60, 0.3);
-}
-
-.close-preview-button {
-  display: block;
-  width: 100%;
-  padding: 0.8rem;
-  margin-top: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.close-preview-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .loading-message,
-.no-reports-message {
+.no-reports-message,
+.error-message {
   text-align: center;
   padding: 2rem;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
 }
 
 /* Animation d'entrée */
@@ -424,6 +410,52 @@
 /* Styles pour le formulaire de rapport */
 .report-form {
   width: 100%;
+}
+
+.report-form .button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.report-form .button-group button {
+  flex: 1;
+  min-width: 200px;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.report-form .cancel-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.report-form .cancel-button:hover {
+  background: #45a049;
+}
+
+.report-form .submit-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.report-form .submit-button:hover {
+  background: #45a049;
+}
+
+.report-form .submit-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
 }
 
 .report-textarea {
@@ -527,5 +559,17 @@
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Ajustements pour les sélecteurs */
+.filter-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.report-select {
+  min-width: 150px;
   text-align: center;
 } 
