@@ -17,7 +17,7 @@ const ViewReportsPage = ({ onClose, user }) => {
 
   const fetchReports = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/reports?filter=${filter}&sortBy=${sortBy}&order=${sortOrder}`, {
+      const response = await fetch('http://localhost:5000/api/reports', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
@@ -25,7 +25,28 @@ const ViewReportsPage = ({ onClose, user }) => {
       
       if (response.ok) {
         const data = await response.json();
-        setReports(data);
+        let sortedReports = [...data];
+
+        // Appliquer le filtre
+        if (filter !== 'all') {
+          sortedReports = sortedReports.filter(report => report.type === filter);
+        }
+
+        // Appliquer le tri
+        sortedReports.sort((a, b) => {
+          if (sortBy === 'date') {
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+            return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+          } else if (sortBy === 'type') {
+            return sortOrder === 'asc' 
+              ? a.type.localeCompare(b.type)
+              : b.type.localeCompare(a.type);
+          }
+          return 0;
+        });
+
+        setReports(sortedReports);
       } else {
         throw new Error('Erreur lors de la récupération des rapports');
       }

@@ -2,41 +2,94 @@
   position: absolute;
   top: 60px;
   right: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(25, 25, 25, 0.95);
   backdrop-filter: blur(8px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   width: 300px;
   overflow: hidden;
   z-index: 1000;
   color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .user-menu-header {
-  padding: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .user-menu-content {
-  padding: 10px;
+  padding: 8px;
 }
 
 .menu-item {
-  padding: 12px 15px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
   border-radius: 8px;
+  margin: 2px 0;
+  font-weight: 400;
 }
 
 .menu-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+.menu-item svg {
+  font-size: 1.1em;
+  opacity: 0.9;
+}
+
+/* Séparateur entre les groupes de menu */
+.menu-separator {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 8px 0;
+}
+
+/* Animation d'entrée */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-menu {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Style spécifique pour les éléments météorologiques */
+.menu-item.meteorologist {
+  color: #4CAF50;
+}
+
+/* Style pour les icônes */
+.menu-item .FaUser,
+.menu-item .FaFileAlt,
+.menu-item .FaClipboardList {
+  color: #4a90e2;
+}
+
+.menu-item .FaStar {
+  color: #ffd700;
+}
+
+.menu-item .FaFlag {
+  color: #e74c3c;
 }
 
 .rating-container {
@@ -86,20 +139,4 @@
 
 .report-form button:hover {
   background-color: #45a049;
-}
-
-/* Animation d'entrée */
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.user-menu {
-  animation: slideIn 0.3s ease-out;
 } 

@@ -28,6 +28,24 @@ const UserMenu = ({ user, isOpen, onClose }) => {
         </div>
         
         <div className="user-menu-content">
+          {/* Section Rapports */}
+          <div className="menu-item" onClick={() => handleMenuClick('view-reports')}>
+            <FaFileAlt /> Voir les rapports
+          </div>
+
+          {user.role === 'meteorologist' && (
+            <>
+              <div className="menu-item meteorologist" onClick={() => handleMenuClick('my-reports')}>
+                <FaClipboardList /> Mes rapports
+              </div>
+              <div className="menu-item meteorologist" onClick={() => handleMenuClick('generate-report')}>
+                <FaFileAlt /> Créer un rapport
+              </div>
+              <div className="menu-separator" />
+            </>
+          )}
+
+          {/* Section Feedback */}
           <div className="menu-item" onClick={() => handleMenuClick('rating')}>
             <FaStar /> Noter la plateforme
           </div>
@@ -35,21 +53,6 @@ const UserMenu = ({ user, isOpen, onClose }) => {
           <div className="menu-item" onClick={() => handleMenuClick('report')}>
             <FaFlag /> Signaler un problème
           </div>
-
-          <div className="menu-item" onClick={() => handleMenuClick('view-reports')}>
-            <FaFileAlt /> Voir les rapports
-          </div>
-
-          {user.role === 'meteorologist' && (
-            <>
-              <div className="menu-item" onClick={() => handleMenuClick('generate-report')}>
-                <FaFileAlt /> Créer un rapport
-              </div>
-              <div className="menu-item" onClick={() => handleMenuClick('my-reports')}>
-                <FaClipboardList /> Mes rapports
-              </div>
-            </>
-          )}
         </div>
       </div>
 
