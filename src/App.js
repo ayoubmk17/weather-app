@@ -69,16 +69,22 @@ function App() {
   };
 
   const handleLogout = () => {
-    // Afficher d'abord le toast
-    setToast({ visible: true, message: 'Déconnexion réussie !', type: 'success' });
+    // Fermer le menu utilisateur s'il est ouvert
+    setIsUserMenuOpen(false);
     
-    // Nettoyer les données utilisateur après un court délai
-    setTimeout(() => {
-      localStorage.removeItem('token');
-      setUser(null);
-      setIsLoggedIn(false);
-      window.location.reload();
-    }, 1500);
+    // Nettoyer les données utilisateur
+    localStorage.removeItem('token');
+    setUser(null);
+    setIsLoggedIn(false);
+    
+    // Afficher le toast de déconnexion
+    showToast('Déconnexion réussie !', 'success');
+    
+    // Réinitialiser les autres états si nécessaire
+    setWeather(null);
+    setForecast(null);
+    setCity('');
+    setUserLocation(null);
   };
 
   // Fonction pour obtenir la ville à partir des coordonnées

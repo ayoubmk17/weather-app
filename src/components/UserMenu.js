@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { FaStar, FaFlag, FaFileAlt, FaUser } from 'react-icons/fa';
+import { FaStar, FaFlag, FaFileAlt, FaUser, FaClipboardList } from 'react-icons/fa';
 import './UserMenu.css';
 import RatingPage from '../pages/RatingPage';
 import ReportProblemPage from '../pages/ReportProblemPage';
 import ViewReportsPage from '../pages/ViewReportsPage';
 import GenerateReportPage from '../pages/GenerateReportPage';
+import MyReportsPage from '../pages/MyReportsPage';
 
 const UserMenu = ({ user, isOpen, onClose }) => {
   const [currentPage, setCurrentPage] = useState(null);
@@ -17,7 +18,7 @@ const UserMenu = ({ user, isOpen, onClose }) => {
     setCurrentPage(null);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !user) return null;
 
   return (
     <>
@@ -40,9 +41,14 @@ const UserMenu = ({ user, isOpen, onClose }) => {
           </div>
 
           {user.role === 'meteorologist' && (
-            <div className="menu-item" onClick={() => handleMenuClick('generate-report')}>
-              <FaFileAlt /> Générer un rapport
-            </div>
+            <>
+              <div className="menu-item" onClick={() => handleMenuClick('generate-report')}>
+                <FaFileAlt /> Créer un rapport
+              </div>
+              <div className="menu-item" onClick={() => handleMenuClick('my-reports')}>
+                <FaClipboardList /> Mes rapports
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -61,6 +67,10 @@ const UserMenu = ({ user, isOpen, onClose }) => {
 
       {currentPage === 'generate-report' && user.role === 'meteorologist' && (
         <GenerateReportPage onClose={handleClosePage} user={user} />
+      )}
+
+      {currentPage === 'my-reports' && user.role === 'meteorologist' && (
+        <MyReportsPage onClose={handleClosePage} user={user} />
       )}
     </>
   );

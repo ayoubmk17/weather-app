@@ -39,11 +39,14 @@
   display: block;
   margin-bottom: 0.5rem;
   color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
 }
 
-.report-input,
+/* Styles améliorés pour les selects */
 .report-select,
-.report-textarea {
+.report-input,
+.report-textarea,
+.date-input {
   width: 100%;
   padding: 0.8rem;
   background: rgba(255, 255, 255, 0.1);
@@ -51,11 +54,80 @@
   border-radius: 8px;
   color: white;
   font-size: 1rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
-.report-textarea {
-  min-height: 120px;
-  resize: vertical;
+/* Style spécifique pour les options du select */
+.report-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1.2rem;
+  padding-right: 2.5rem;
+}
+
+.report-select option {
+  background: rgb(40, 40, 40);
+  color: white;
+  padding: 0.8rem;
+}
+
+.report-select:focus,
+.report-input:focus,
+.report-textarea:focus,
+.date-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* Styles pour les dates */
+.date-range {
+  margin: 1.5rem 0;
+}
+
+.date-inputs {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.date-input {
+  flex: 1;
+}
+
+/* Styles pour les paramètres */
+.parameters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.parameter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.parameter-checkbox:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.parameter-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4a90e2;
 }
 
 /* Boutons */
@@ -67,42 +139,38 @@
 }
 
 .submit-button,
-.cancel-button,
-.close-button {
+.cancel-button {
   padding: 0.8rem 1.5rem;
   border-radius: 8px;
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
 }
 
 .submit-button {
   background: #4a90e2;
   color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .submit-button:hover {
   background: #357abd;
 }
 
-.submit-button:disabled {
-  background: #2c3e50;
-  cursor: not-allowed;
-}
-
-.cancel-button,
-.close-button {
+.cancel-button {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
-.cancel-button:hover,
-.close-button:hover {
+.cancel-button:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.button-icon {
+  margin-left: 0.5rem;
 }
 
 /* Système de notation */
@@ -162,14 +230,21 @@
 }
 
 .reports-list {
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.report-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 1rem;
+.report-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.report-item:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .report-header {
@@ -179,65 +254,134 @@
   margin-bottom: 1rem;
 }
 
-.report-type {
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
+.report-title {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
-.report-type.bug { background: #e74c3c; }
-.report-type.data { background: #3498db; }
-.report-type.feature { background: #2ecc71; }
-.report-type.other { background: #95a5a6; }
+.report-title h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+}
 
-.report-description {
-  color: rgba(255, 255, 255, 0.8);
+.report-icon {
+  color: #4a90e2;
+  font-size: 1.2rem;
+}
+
+.report-type {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.report-type.daily { background: #4a90e2; }
+.report-type.weekly { background: #2ecc71; }
+.report-type.monthly { background: #9b59b6; }
+.report-type.special { background: #e67e22; }
+
+.report-info {
+  display: flex;
+  gap: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
-.report-footer {
-  display: flex;
-  justify-content: space-between;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.9rem;
-}
-
-/* Génération de rapports */
-.date-range {
+.report-content {
   margin: 1.5rem 0;
-}
-
-.date-inputs {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.date-input {
-  flex: 1;
-  padding: 0.8rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  color: white;
 }
 
-.parameters-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+.text-content {
+  white-space: pre-wrap;
+  color: white;
+  line-height: 1.6;
+}
+
+.pdf-viewer {
+  margin: 1rem 0;
+}
+
+.pdf-viewer iframe {
+  border: none;
+  border-radius: 4px;
+  background: white;
+}
+
+.report-actions {
+  display: flex;
   gap: 1rem;
   margin-top: 1rem;
 }
 
-.parameter-checkbox {
+.action-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
 }
 
-.button-icon {
-  margin-left: 0.5rem;
+.action-button.view {
+  background: rgba(74, 144, 226, 0.2);
+  color: #4a90e2;
+}
+
+.action-button.view:hover {
+  background: rgba(74, 144, 226, 0.3);
+}
+
+.action-button.download {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.action-button.download:hover {
+  background: rgba(46, 204, 113, 0.3);
+}
+
+.action-button.delete {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.action-button.delete:hover {
+  background: rgba(231, 76, 60, 0.3);
+}
+
+.close-preview-button {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.close-preview-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.loading-message,
+.no-reports-message {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Animation d'entrée */
@@ -275,4 +419,113 @@
   .parameters-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* Styles pour le formulaire de rapport */
+.report-form {
+  width: 100%;
+}
+
+.report-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  resize: vertical;
+  margin-top: 1rem;
+}
+
+.report-content-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.content-option {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.option-label input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #4a90e2;
+}
+
+.file-upload-container {
+  margin-top: 1rem;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.file-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  color: white;
+}
+
+.file-upload-label svg {
+  font-size: 2rem;
+  color: #4a90e2;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.file-preview span {
+  color: white;
+  word-break: break-all;
+}
+
+.remove-file-button {
+  background: none;
+  border: none;
+  color: #ff4444;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.remove-file-button:hover {
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.error-message {
+  background: rgba(255, 68, 68, 0.1);
+  color: #ff4444;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
 } 
