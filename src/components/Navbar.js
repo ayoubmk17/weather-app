@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { FaUser, FaSignOutAlt, FaMapMarkerAlt, FaBars, FaGlobeAmericas } from 'react-icons/fa';
 import Search from './Search';
 import './Navbar.css';
+import logo from '../logo.svg';
 
 const Navbar = ({ onLogin, onSearch, isLoggedIn, user, onLogout, onLocationClick, onMenuClick, onZoomOut }) => {
   return (
     <nav className="navbar">
       <div className="navbar-brand">
+        <img src={logo} alt="WeatherApp Logo" className="navbar-logo" />
         <h2>WeatherApp</h2>
       </div>
       <div className="navbar-right">

@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import LoginModal from './components/LoginModal';
 import Toast from './components/Toast';
 import UserMenu from './components/UserMenu';
+import Footer from './components/Footer';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -316,6 +317,8 @@ function App() {
           )}
         </AnimatePresence>
       </div>
+
+      <Footer />
     </div>
   );
 }
