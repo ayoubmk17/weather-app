@@ -1,0 +1,69 @@
+.alert-container {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid rgba(255, 204, 0, 0.3);
+}
+
+.alert {
+  background: rgba(255, 0, 0, 0.1);
+  border-left: 4px solid #ff6b6b;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.alert:last-child {
+  margin-bottom: 0;
+}
+
+.alert h3 {
+  color: #ff6b6b;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alert h3::before {
+  content: "⚠️";
+}
+
+.alert p {
+  color: white;
+  margin: 0;
+  line-height: 1.4;
+  font-size: 0.95rem;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation de pulsation pour attirer l'attention */
+.alert {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    border-color: rgba(255, 107, 107, 0.6);
+  }
+  50% {
+    border-color: rgba(255, 107, 107, 1);
+  }
+  100% {
+    border-color: rgba(255, 107, 107, 0.6);
+  }
+} 
