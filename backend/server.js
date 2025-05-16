@@ -292,8 +292,12 @@ app.post('/api/reports', auth, async (req, res) => {
 
     console.log('Tentative de sauvegarde du rapport:', newReport);
     await newReport.save();
+    
+    // Récupérer le rapport avec les informations de l'auteur
+    const populatedReport = await Report.findById(newReport._id).populate('author', 'firstName lastName');
+    
     console.log('Rapport sauvegardé avec succès');
-    res.status(201).json(newReport);
+    res.status(201).json(populatedReport);
   } catch (error) {
     console.error('Erreur détaillée lors de la création du rapport:', error);
     res.status(500).json({ message: 'Error creating report', error: error.message });

@@ -9,8 +9,11 @@ const MyReportsPage = ({ onClose, user }) => {
   const [selectedReport, setSelectedReport] = useState(null);
 
   useEffect(() => {
-    fetchReports();
-  }, []);
+    if (user) {
+      console.log('Current user:', user);
+      fetchReports();
+    }
+  }, [user]);
 
   const fetchReports = async () => {
     try {
@@ -22,12 +25,26 @@ const MyReportsPage = ({ onClose, user }) => {
       
       if (response.ok) {
         const data = await response.json();
+        console.log('Fetched reports:', data);
         // Filtrer pour n'afficher que les rapports de l'utilisateur connecté
-        setReports(data.filter(report => report.author._id === user.id));
+        const filteredReports = data.filter(report => {
+          if (!report.author) {
+            console.log('Report without author:', report);
+            return false;
+          }
+          console.log('Comparing:', {
+            reportAuthorId: report.author._id,
+            userId: user._id || user.id
+          });
+          return report.author._id === (user._id || user.id);
+        });
+        console.log('Filtered reports:', filteredReports);
+        setReports(filteredReports);
       } else {
         throw new Error('Erreur lors de la récupération des rapports');
       }
     } catch (error) {
+      console.error('Error in fetchReports:', error);
       setError(error.message);
     } finally {
       setLoading(false);

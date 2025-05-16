@@ -55,7 +55,7 @@ Titre: ${report.title}
 Type: ${getReportTypeLabel(report.type)}
 Localisation: ${report.location}
 Date: ${formatDate(report.createdAt)}
-Auteur: ${report.author.firstName} ${report.author.lastName}
+Auteur: ${report.author ? `${report.author.firstName} ${report.author.lastName}` : 'Auteur inconnu'}
 
 Contenu:
 --------
@@ -156,7 +156,7 @@ ${report.content}
                 <div className="report-info">
                   <span>Localisation: {report.location}</span>
                   <span>Date: {formatDate(report.createdAt)}</span>
-                  <span>Par: {report.author.firstName} {report.author.lastName}</span>
+                  <span>Par: {report.author ? `${report.author.firstName} ${report.author.lastName}` : 'Auteur inconnu'}</span>
                 </div>
 
                 {selectedReport === report._id && (
