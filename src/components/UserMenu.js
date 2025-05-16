@@ -1,116 +1,68 @@
 import React, { useState } from 'react';
-import { FaStar, FaFlag, FaFileAlt, FaThumbsUp, FaThumbsDown, FaUser } from 'react-icons/fa';
+import { FaStar, FaFlag, FaFileAlt, FaUser } from 'react-icons/fa';
 import './UserMenu.css';
+import RatingPage from '../pages/RatingPage';
+import ReportProblemPage from '../pages/ReportProblemPage';
+import ViewReportsPage from '../pages/ViewReportsPage';
+import GenerateReportPage from '../pages/GenerateReportPage';
 
 const UserMenu = ({ user, isOpen, onClose }) => {
-  const [rating, setRating] = useState(0);
-  const [hoverRating, setHoverRating] = useState(0);
-  const [reportText, setReportText] = useState('');
-  const [showReportForm, setShowReportForm] = useState(false);
-  const [showRatingForm, setShowRatingForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(null);
 
-  const handleRating = (value) => {
-    setRating(value);
-    // Ici, vous pouvez ajouter la logique pour envoyer la note au backend
+  const handleMenuClick = (page) => {
+    setCurrentPage(page);
   };
 
-  const handleReport = async (e) => {
-    e.preventDefault();
-    // Logique pour envoyer le rapport à l'admin
-    try {
-      const response = await fetch('http://localhost:5000/api/reports', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          text: reportText,
-          type: 'error',
-          userId: user._id
-        })
-      });
-      if (response.ok) {
-        setReportText('');
-        setShowReportForm(false);
-        // Afficher un message de succès
-      }
-    } catch (error) {
-      console.error('Erreur lors de l\'envoi du rapport:', error);
-    }
-  };
-
-  const handleReaction = async (reportId, type) => {
-    try {
-      await fetch(`http://localhost:5000/api/reports/${reportId}/react`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({ reaction: type })
-      });
-      // Mettre à jour l'interface utilisateur
-    } catch (error) {
-      console.error('Erreur lors de la réaction:', error);
-    }
+  const handleClosePage = () => {
+    setCurrentPage(null);
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="user-menu">
-      <div className="user-menu-header">
-        <FaUser /> {user.firstName} {user.lastName}
-      </div>
-      
-      <div className="user-menu-content">
-        {/* Section Notation */}
-        <div className="menu-item" onClick={() => setShowRatingForm(!showRatingForm)}>
-          <FaStar /> Noter la plateforme
+    <>
+      <div className="user-menu">
+        <div className="user-menu-header">
+          <FaUser /> {user.firstName} {user.lastName}
         </div>
-        {showRatingForm && (
-          <div className="rating-container">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <FaStar
-                key={star}
-                className={`star ${star <= (hoverRating || rating) ? 'active' : ''}`}
-                onClick={() => handleRating(star)}
-                onMouseEnter={() => setHoverRating(star)}
-                onMouseLeave={() => setHoverRating(0)}
-              />
-            ))}
+        
+        <div className="user-menu-content">
+          <div className="menu-item" onClick={() => handleMenuClick('rating')}>
+            <FaStar /> Noter la plateforme
           </div>
-        )}
 
-        {/* Section Signalement */}
-        <div className="menu-item" onClick={() => setShowReportForm(!showReportForm)}>
-          <FaFlag /> Signaler un problème
-        </div>
-        {showReportForm && (
-          <form onSubmit={handleReport} className="report-form">
-            <textarea
-              value={reportText}
-              onChange={(e) => setReportText(e.target.value)}
-              placeholder="Décrivez le problème..."
-            />
-            <button type="submit">Envoyer</button>
-          </form>
-        )}
-
-        {/* Section Rapports (visible pour tous) */}
-        <div className="menu-item">
-          <FaFileAlt /> Voir les rapports
-        </div>
-
-        {/* Section spécifique aux météorologues */}
-        {user.role === 'meteorologist' && (
-          <div className="menu-item">
-            <FaFileAlt /> Générer un rapport
+          <div className="menu-item" onClick={() => handleMenuClick('report')}>
+            <FaFlag /> Signaler un problème
           </div>
-        )}
+
+          <div className="menu-item" onClick={() => handleMenuClick('view-reports')}>
+            <FaFileAlt /> Voir les rapports
+          </div>
+
+          {user.role === 'meteorologist' && (
+            <div className="menu-item" onClick={() => handleMenuClick('generate-report')}>
+              <FaFileAlt /> Générer un rapport
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+
+      {currentPage === 'rating' && (
+        <RatingPage onClose={handleClosePage} user={user} />
+      )}
+
+      {currentPage === 'report' && (
+        <ReportProblemPage onClose={handleClosePage} user={user} />
+      )}
+
+      {currentPage === 'view-reports' && (
+        <ViewReportsPage onClose={handleClosePage} user={user} />
+      )}
+
+      {currentPage === 'generate-report' && user.role === 'meteorologist' && (
+        <GenerateReportPage onClose={handleClosePage} user={user} />
+      )}
+    </>
   );
 };
 
