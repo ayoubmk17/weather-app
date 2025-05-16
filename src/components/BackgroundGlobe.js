@@ -2,12 +2,29 @@ import React, { useEffect, useRef, useState } from 'react';
 import Globe from 'react-globe.gl';
 import './BackgroundGlobe.css';
 
-function BackgroundGlobe({ globeCoords, markers }) {
+function BackgroundGlobe({ globeCoords, markers, onZoomOutRef }) {
   const globeEl = useRef();
   const [dimensions, setDimensions] = useState({
     width: window.innerWidth,
     height: window.innerHeight
   });
+
+  const handleZoomOut = () => {
+    if (globeEl.current) {
+      const controls = globeEl.current.controls();
+      controls.autoRotate = true;
+      globeEl.current.pointOfView(
+        { lat: 0, lng: 0, altitude: 2.5 },
+        2000
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (typeof onZoomOutRef === 'function') {
+      onZoomOutRef(handleZoomOut);
+    }
+  }, [onZoomOutRef]);
 
   useEffect(() => {
     if (globeEl.current) {

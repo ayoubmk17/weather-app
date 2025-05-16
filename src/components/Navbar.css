@@ -32,7 +32,9 @@
 
 .location-button,
 .login-button,
-.logout-button {
+.logout-button,
+.menu-button,
+.zoom-out-button {
   background: none;
   border: none;
   color: white;
@@ -55,9 +57,19 @@
   background: rgba(74, 144, 226, 0.3);
 }
 
+.zoom-out-button {
+  background: rgba(46, 213, 115, 0.2);
+}
+
+.zoom-out-button:hover {
+  background: rgba(46, 213, 115, 0.3);
+}
+
 .location-icon,
 .login-icon,
-.logout-icon {
+.logout-icon,
+.menu-icon,
+.globe-icon {
   font-size: 1.2rem;
 }
 
@@ -71,4 +83,12 @@
 .user-name {
   font-size: 0.9rem;
   color: white;
+}
+
+.menu-button {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-button:hover {
+  background: rgba(255, 255, 255, 0.2);
 } 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import { AnimatePresence, motion } from 'framer-motion';
 import WeatherDisplay from './components/WeatherDisplay';
@@ -7,6 +7,7 @@ import BackgroundGlobe from './components/BackgroundGlobe';
 import Navbar from './components/Navbar';
 import LoginModal from './components/LoginModal';
 import Toast from './components/Toast';
+import UserMenu from './components/UserMenu';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -18,9 +19,15 @@ function App() {
   const [markers, setMarkers] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
   const [userLocation, setUserLocation] = useState(null);
+  const [handleZoomOut, setHandleZoomOut] = useState(null);
+
+  const zoomOutRef = useCallback((zoomOutFn) => {
+    setHandleZoomOut(() => zoomOutFn);
+  }, []);
 
   const showToast = (message, type = 'success') => {
     setToast({ visible: true, message, type });
@@ -62,10 +69,16 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
-    setIsLoggedIn(false);
-    showToast('Déconnexion réussie !');
+    // Afficher d'abord le toast
+    setToast({ visible: true, message: 'Déconnexion réussie !', type: 'success' });
+    
+    // Nettoyer les données utilisateur après un court délai
+    setTimeout(() => {
+      localStorage.removeItem('token');
+      setUser(null);
+      setIsLoggedIn(false);
+      window.location.reload();
+    }, 1500);
   };
 
   // Fonction pour obtenir la ville à partir des coordonnées
@@ -87,12 +100,6 @@ function App() {
   };
 
   const getUserLocation = () => {
-    // Vérifier si l'utilisateur est connecté
-    if (!isLoggedIn || !user) {
-      showToast('Veuillez vous connecter pour utiliser la géolocalisation', 'error');
-      return;
-    }
-
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -184,7 +191,8 @@ function App() {
     <div className="App">
       <BackgroundGlobe 
         globeCoords={globeCoords} 
-        markers={markers} 
+        markers={markers}
+        onZoomOutRef={zoomOutRef}
       />
 
       <Navbar 
@@ -194,12 +202,20 @@ function App() {
         user={user}
         onLogout={handleLogout}
         onLocationClick={getUserLocation}
+        onMenuClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+        onZoomOut={handleZoomOut}
       />
 
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
+      />
+
+      <UserMenu
+        user={user}
+        isOpen={isUserMenuOpen}
+        onClose={() => setIsUserMenuOpen(false)}
       />
 
       <Toast 
