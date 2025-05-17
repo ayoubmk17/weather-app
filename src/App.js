@@ -146,20 +146,54 @@ function App() {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lng: longitude });
           
-          // Obtenir le nom de la ville
-          const cityName = await getCityFromCoords(latitude, longitude);
-          if (cityName) {
-            handleSearch(cityName);
-            showToast(`Météo chargée pour ${cityName}`);
+          // Récupération directe des données météo par coordonnées
+          const apiKey = process.env.REACT_APP_API_KEY;
+          try {
+            const response = await fetch(
+              `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${apiKey}`
+            );
+            const data = await response.json();
+            
+            if (data.cod === 200) {
+              // Utiliser directement les données météo obtenues
+              setWeather(data);
+              
+              // Récupérer les prévisions
+              const forecastRes = await fetch(
+                `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${apiKey}`
+              );
+              const forecastData = await forecastRes.json();
+              
+              if (forecastData.cod === '200') {
+                setForecast(forecastData);
+                setCity(data.name);
+                setGlobeCoords({ lat: latitude, lng: longitude });
+                setMarkers([{ 
+                  lat: latitude,
+                  lng: longitude,
+                  city: data.name
+                }]);
+                showToast(`Météo chargée pour ${data.name}`);
+              }
+            } else {
+              throw new Error('Erreur lors de la récupération des données météo');
+            }
+          } catch (error) {
+            console.error('Erreur:', error);
+            showToast('Erreur lors de la récupération des données météo', 'error');
           }
         },
         (error) => {
           console.error('Erreur de géolocalisation:', error);
-          showToast('Impossible d\'obtenir votre position', 'error');
+          let message = 'Impossible d\'obtenir votre position';
+          if (error.code === 1) {
+            message = 'Veuillez autoriser l\'accès à votre position';
+          }
+          showToast(message, 'error');
         },
         {
           enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 10000,
           maximumAge: 0
         }
       );
