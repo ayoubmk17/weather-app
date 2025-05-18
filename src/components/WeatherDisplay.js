@@ -20,7 +20,7 @@ import {
 } from "recharts";
 import "./WeatherDisplay.css";
 
-const WeatherDisplay = ({ data, forecast }) => {
+const WeatherDisplay = ({ data, forecast, city }) => {
   const [localTime, setLocalTime] = useState("");
 
   useEffect(() => {
@@ -78,25 +78,26 @@ const WeatherDisplay = ({ data, forecast }) => {
       <div className="weather-left">
         <div className="weather-info-container animate-fade-in">
           <div className="weather-main">
+            <div className="city-name">{city || data.name}</div>
             {getWeatherIcon(data.weather[0].main)}
             <div className="temperature">{Math.round(data.main.temp)}°C</div>
             <div className="weather-description">{data.weather[0].description}</div>
             <div className="local-time">Heure locale : {localTime}</div>
           </div>
-            <div className="weather-card">
-              <WiHumidity className="weather-icon" />
-              <div className="weather-value">{data.main.humidity}%</div>
-            </div>
-            <div className="weather-card">
-              <WiStrongWind className="weather-icon" />
-              <div className="weather-value">{data.wind.speed} m/s</div>
-            </div>
-            <div className="weather-card">
-              <WiBarometer className="weather-icon" />
-              <div className="weather-value">{data.main.pressure} hPa</div>
-            </div>
+          <div className="weather-card">
+            <WiHumidity className="weather-icon" />
+            <div className="weather-value">{data.main.humidity}%</div>
+          </div>
+          <div className="weather-card">
+            <WiStrongWind className="weather-icon" />
+            <div className="weather-value">{data.wind.speed} m/s</div>
+          </div>
+          <div className="weather-card">
+            <WiBarometer className="weather-icon" />
+            <div className="weather-value">{data.main.pressure} hPa</div>
           </div>
         </div>
+      </div>
 
       {/* Espace central */}
       <div className="weather-spacer"></div>
@@ -117,7 +118,7 @@ const WeatherDisplay = ({ data, forecast }) => {
         </div>
         <div className="forecast-and-chart">
           <div className="forecast-section">
-            <h3>Prévisions sur 7 jours</h3>
+            <h3>Prévisions sur 5 jours</h3>
             <div className="forecast-cards">
               {daily.map((day, i) => (
                 <div className="forecast-card" key={i}>

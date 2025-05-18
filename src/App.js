@@ -121,24 +121,6 @@ function App() {
     setUserLocation(null);
   };
 
-  // Fonction pour obtenir la ville à partir des coordonnées
-  const getCityFromCoords = async (lat, lon) => {
-    const apiKey = process.env.REACT_APP_API_KEY;
-    try {
-      const response = await fetch(
-        `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=${apiKey}`
-      );
-      const data = await response.json();
-      if (data && data[0]) {
-        return data[0].name;
-      }
-      throw new Error('Ville non trouvée');
-    } catch (error) {
-      console.error('Erreur lors de la récupération de la ville:', error);
-      return null;
-    }
-  };
-
   const getUserLocation = () => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -146,19 +128,18 @@ function App() {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lng: longitude });
           
-          // Récupération directe des données météo par coordonnées
           const apiKey = process.env.REACT_APP_API_KEY;
           try {
-            const response = await fetch(
+            // Récupération directe des données météo par coordonnées
+            const weatherResponse = await fetch(
               `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${apiKey}`
             );
-            const data = await response.json();
+            const weatherData = await weatherResponse.json();
             
-            if (data.cod === 200) {
-              // Utiliser directement les données météo obtenues
-              setWeather(data);
+            if (weatherData.cod === 200) {
+              setWeather(weatherData);
               
-              // Récupérer les prévisions
+              // Obtenir les prévisions
               const forecastRes = await fetch(
                 `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${apiKey}`
               );
@@ -166,14 +147,14 @@ function App() {
               
               if (forecastData.cod === '200') {
                 setForecast(forecastData);
-                setCity(data.name);
+                setCity(weatherData.name); // Utiliser le nom de la ville des données météo
                 setGlobeCoords({ lat: latitude, lng: longitude });
                 setMarkers([{ 
                   lat: latitude,
                   lng: longitude,
-                  city: data.name
+                  city: weatherData.name
                 }]);
-                showToast(`Météo chargée pour ${data.name}`);
+                showToast(`Météo chargée pour ${weatherData.name}`);
               }
             } else {
               throw new Error('Erreur lors de la récupération des données météo');
@@ -240,7 +221,7 @@ function App() {
       // Mise à jour des états
       setWeather(currentData);
       setForecast(forecastData);
-      setCity(cityName);
+      setCity(cityName); // Utiliser le nom de ville saisi par l'utilisateur
       setGlobeCoords({ 
         lat: currentData.coord.lat, 
         lng: currentData.coord.lon 
@@ -248,7 +229,7 @@ function App() {
       setMarkers([{ 
         lat: currentData.coord.lat, 
         lng: currentData.coord.lon,
-        city: cityName 
+        city: cityName // Utiliser le nom de ville saisi par l'utilisateur
       }]);
 
     } catch (err) {
